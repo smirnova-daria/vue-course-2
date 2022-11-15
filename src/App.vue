@@ -5,15 +5,14 @@
     </header>
     <ul>
       <friend-contact
-        name="Liza Mironova"
-        phone-number="0123 4567 8999"
-        email-address="liza@hello.js"
-        :is-favorite="true"
-      ></friend-contact>
-      <friend-contact
-        name="Masha Chervyakova"
-        phone-number="0123 4567 8999"
-        email-address="masha@hello.js"
+        v-for="friend in friends"
+        :key="friend.id"
+        :friend-id="friend.id"
+        :name="friend.name"
+        :phone-number="friend.phone"
+        :email-address="friend.email"
+        :is-favorite="friend.isFavorite"
+        @toggle-favorite="toggleFavoriteStatus"
       ></friend-contact>
     </ul>
   </section>
@@ -29,15 +28,24 @@ export default {
           name: "Liza Mironova",
           phone: "0123 4567 890",
           email: "liza@hello.js",
+          isFavorite: true,
         },
         {
           id: "masha",
           name: "Masha Chervyakova",
           phone: "0123 4567 890",
           email: "masha@hello.vue",
+          isFavorite: true,
         },
       ],
     };
+  },
+
+  methods: {
+    toggleFavoriteStatus(id) {
+      const foundFriend = this.friends.find((f) => f.id === id);
+      foundFriend.isFavorite = !foundFriend.isFavorite;
+    },
   },
 };
 </script>
