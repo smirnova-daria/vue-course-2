@@ -4,7 +4,17 @@
     <button @click="animateBlock">Animate</button>
   </div>
   <div class="container">
-    <transition name="para">
+    <transition
+      :css="false"
+      @before-enter="beforeEnter"
+      @before-leave="beforeLeave"
+      @enter="enter"
+      @after-enter="afterEnter"
+      @leave="leave"
+      @after-leave="afterLeave"
+      @enter-cancelled="enterCancelled"
+      @leave-cancelled="leaveCancelled"
+    >
       <p v-if="pIsVisible">This is inly sometimes visible...</p>
     </transition>
     <button @click="toggleParagraph">Toggle paragraph</button>
@@ -32,9 +42,47 @@ export default {
       animatedBlock: false,
       pIsVisible: false,
       userIsVisible: false,
+      enterInterval: null,
+      leaveInterval: null,
     };
   },
   methods: {
+    beforeEnter(el) {
+      el.style.opacity = 0;
+    },
+    enter(el, done) {
+      let round = 1;
+      this.enterInterval = setInterval(() => {
+        el.style.opacity = round * 0.01;
+        round++;
+        if (round > 100) {
+          clearInterval(this.enterInterval);
+          done();
+        }
+      }, 10);
+    },
+    beforeLeave(el) {
+      el.style.opacity = 1;
+    },
+    afterEnter() {},
+    leave(el, done) {
+      let round = 1;
+      this.leaveInterval = setInterval(() => {
+        el.style.opacity = 1 - round * 0.01;
+        round++;
+        if (round > 100) {
+          clearInterval(this.leaveInterval);
+          done();
+        }
+      }, 10);
+    },
+    afterLeave() {},
+    enterCancelled() {
+      clearInterval(this.enterInterval);
+    },
+    leaveCancelled() {
+      clearInterval(this.leaveInterval);
+    },
     showDialog() {
       this.dialogIsVisible = true;
     },
@@ -104,32 +152,6 @@ button:active {
 .animate {
   /* transform: translateX(-150px); */
   animation: slide-scale 1s forwards;
-}
-
-.para-enter-from {
-  /* opacity: 0;
-  transform: translateY(-30px); */
-}
-.para-enter-active {
-  /* transition: 0.3s; */
-  animation: slide-scale 0.3s;
-}
-.para-enter-to {
-  /* opacity: 1;
-  transform: translateY(0); */
-}
-
-.para-leave-from {
-  /* opacity: 1;
-  transform: translateY(0); */
-}
-.para-leave-active {
-  /* transition: 0.3s; */
-  animation: slide-scale 0.3s;
-}
-.para-leave-to {
-  /* opacity: 0; */
-  /* transform: translateY(30px); */
 }
 
 .fade-button-enter-from,
