@@ -1,7 +1,13 @@
 <template>
   <div class="container">
-    <div class="block"></div>
-    <button>Animate</button>
+    <div class="block" :class="{ animate: animatedBlock }"></div>
+    <button @click="animateBlock">Animate</button>
+  </div>
+  <div class="container">
+    <transition>
+      <p v-if="pIsVisible">This is inly sometimes visible...</p>
+    </transition>
+    <button @click="toggleParagraph">Toggle paragraph</button>
   </div>
   <base-modal @close="hideDialog" v-if="dialogIsVisible">
     <p>This is a test dialog!</p>
@@ -10,12 +16,16 @@
   <div class="container">
     <button @click="showDialog">Show Dialog</button>
   </div>
-</template>  
+</template>
 
 <script>
 export default {
   data() {
-    return { dialogIsVisible: false };
+    return {
+      dialogIsVisible: false,
+      animatedBlock: false,
+      pIsVisible: false,
+    };
   },
   methods: {
     showDialog() {
@@ -23,6 +33,12 @@ export default {
     },
     hideDialog() {
       this.dialogIsVisible = false;
+    },
+    animateBlock() {
+      this.animatedBlock = true;
+    },
+    toggleParagraph() {
+      this.pIsVisible = !this.pIsVisible;
     },
   },
 };
@@ -57,6 +73,7 @@ button:active {
   height: 8rem;
   background-color: #290033;
   margin-bottom: 2rem;
+  transition: 1s;
 }
 .container {
   max-width: 40rem;
@@ -68,5 +85,47 @@ button:active {
   padding: 2rem;
   border: 2px solid #ccc;
   border-radius: 12px;
+}
+
+.animate {
+  /* transform: translateX(-150px); */
+  animation: slide-fade 1s forwards;
+}
+
+.v-enter-from {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.v-enter-active {
+  transition: 0.3s;
+}
+.v-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.v-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+.v-leave-active {
+  transition: 0.3s;
+}
+.v-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes slide-fade {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+
+  70% {
+    transform: translateX(-120px) scale(1.1);
+  }
+  100% {
+    transform: translateX(-150px) scale(1);
+  }
 }
 </style>
