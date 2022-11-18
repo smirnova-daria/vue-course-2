@@ -13,10 +13,10 @@ const router = createRouter({
     {
       path: "/teams",
       component: TeamsList,
-      // alias: "/"
+      // alias: "/",
+      children: [{ path: ":teamId", component: TeamMembers, props: true }],
     },
     { path: "/users", component: UsersList },
-    { path: "/teams/:teamId", component: TeamMembers, props: true },
     { path: "/:notFound(.*)", component: NotFound },
   ],
 });
