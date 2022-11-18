@@ -26,10 +26,30 @@ const router = createRouter({
         },
       ],
     },
-    { path: "/users", components: { default: UsersList, footer: UsersFooter } },
+    {
+      path: "/users",
+      components: { default: UsersList, footer: UsersFooter },
+      beforeEnter(to, from, next) {
+        console.log("before enter router");
+        next();
+      },
+    },
     { path: "/:notFound(.*)", component: NotFound },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    }
+    return {
+      left: 0,
+      top: 0,
+    };
+  },
 });
+
+// router.beforeEach((to, from, next) => {
+//   next()
+// })
 
 const app = createApp(App);
 app.use(router);
