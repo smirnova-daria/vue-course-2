@@ -16,7 +16,7 @@ export default {
         body: JSON.stringify(coachData),
       }
     );
-    const resData = await res.json();
+    // const resData = await res.json();
 
     if (!res.ok) {
       // error
