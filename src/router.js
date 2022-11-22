@@ -1,4 +1,3 @@
-import { defineAsyncComponent } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import CoachesList from "./pages/coaches/CoachesList.vue";
 import NotFound from "./pages/NotFound.vue";
