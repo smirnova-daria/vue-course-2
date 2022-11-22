@@ -27,8 +27,9 @@ export default {
 
   async fetchRequests(context) {
     const coachId = context.rootGetters.userId;
+    const token = context.rootGetters.token;
     const res = await fetch(
-      `https://vue-find-coach-d856f-default-rtdb.firebaseio.com/requests/${coachId}.json`
+      `https://vue-find-coach-d856f-default-rtdb.firebaseio.com/requests/${coachId}.json?auth=${token}`
     );
     const data = await res.json();
 
