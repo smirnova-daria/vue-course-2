@@ -17,11 +17,13 @@ export default {
 
     if (!res.ok) {
       console.log(data);
-      throw new Error(data.message || "Failed to authenticate");
+      throw new Error(
+        data.message || "Failed to authenticate. Check your login data."
+      );
     }
 
-		console.log(data);
-		context.commit("setUser", {
+    console.log(data);
+    context.commit("setUser", {
       token: data.idToken,
       userId: data.localId,
       tokenExpiration: data.expiresIn,
