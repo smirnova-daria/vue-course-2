@@ -1,61 +1,32 @@
 <template>
-  <section class="container">
-    <user-data
-      :first-name="firstName"
-      :last-name="lastName"
-      :age="age"
-    ></user-data>
-    <button @click="setAge">Change Age</button>
-    <input type="text" placeholder="First Name" v-model="firstName" />
-    <input type="text" placeholder="Last Name" ref="lastNameInput" />
-    <button @click="setLastNameInput">Set last name</button>
-  </section>
+  <main>
+    <user-list :users="activeUsers" @list-projects="selectUser"></user-list>
+    <projects-list :user="selectedUser"></projects-list>
+  </main>
 </template>
 
 <script>
-import { ref, computed } from "vue";
-import UserData from "./components/UserData.vue";
+import USER_DATA from './dummy-data.js';
+
+import UserList from './components/users/UserList.vue';
+import ProjectsList from './components/projects/ProjectsList.vue';
+
 export default {
-  components: { UserData },
-  setup() {
-    // const uName = ref("Daria");
-    // const user = reactive({
-    //   name: "Daria",
-    //   age: 28,
-    // });
-
-    const uAge = ref(28);
-    const firstName = ref("");
-    const lastName = ref("");
-    const lastNameInput = ref(null);
-
-    function setNewAge() {
-      uAge.value++;
-    }
-
-    function setLastNameInput() {
-      lastName.value = lastNameInput.value.value;
-    }
-
-    const userName = computed(function () {
-      return firstName.value + " " + lastName.value;
-    });
-
+  components: {
+    UserList,
+    ProjectsList,
+  },
+  data() {
     return {
-      age: uAge,
-      setAge: setNewAge,
-      userName,
-      firstName,
-      lastName,
-      lastNameInput,
-      setLastNameInput,
+      selectedUser: null,
+      activeUsers: USER_DATA,
     };
   },
-  // data() {
-  //   return {
-  //     userName: "Daria",
-  //   };
-  // },
+  methods: {
+    selectUser(uid) {
+      this.selectedUser = this.activeUsers.find((usr) => usr.id === uid);
+    },
+  },
 };
 </script>
 
@@ -63,21 +34,34 @@ export default {
 * {
   box-sizing: border-box;
 }
-
 html {
   font-family: sans-serif;
 }
-
 body {
   margin: 0;
 }
 
-.container {
-  margin: 3rem auto;
-  max-width: 30rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  padding: 1rem;
-  text-align: center;
+main {
+  display: flex;
+  justify-content: space-around;
+}
+
+button {
+  font: inherit;
+  border: 1px solid #00006b;
+  background-color: transparent;
+  color: #00006b;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+}
+button:hover,
+button:active {
+  background-color: #efefff;
+}
+
+button.selected {
+  background-color: #00006b;
+  color: white;
 }
 </style>
